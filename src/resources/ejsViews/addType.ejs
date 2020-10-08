@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amiibo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+      const types = "<%=types%>";
+      console.log(types);
+
+      const checkTextPattern = () => {
+        const form = document.getElementById("add-type-form");
+        form.reportValidity();
+      };
+
+      const addTypeSubmit = () => {
+        const value = document.getElementById("add-type-text").value;
+
+        $.ajax({
+          type: "POST",
+          url: "/api/type",
+          data: { value: value },
+          dataType: "json",
+        });
+      };
+    </script>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div>
+      <form action="" id="add-type-form" onsubmit="addTypeSubmit()">
+        <label for="">Add new type !!</label>
+        <input
+          autofocus
+          type="text"
+          pattern="[A-Z][a-z-]+"
+          title="Une majuscule au début suivit de minuscule seulement"
+          minlength="4"
+          required
+          id="add-type-text"
+          oninput="checkTextPattern()"
+        />
+        <input type="submit" value="Ajouter" />
+      </form>
+    </div>
+  </body>
+</html>
