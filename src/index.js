@@ -11,6 +11,7 @@ const dataLoadedSuccess = () => {
   // Si le port n'est pas spécifié, alors le port par defaut sera 8888.
   const port = process.argv[2] || 8888;
   const types = dataImportES6.getTypes.amiibo;
+  const amiibos = dataImportES6.getDataAmiibo;
 
   app.set("view engine", "ejs");
 
@@ -27,6 +28,7 @@ const dataLoadedSuccess = () => {
     res.render("index", { port: port });
   });
 
+  app.get("/addAmiibo", (req, res) => res.render("addAmiibo", { amiibos: amiibos }));
   app.get("/addType", (req, res) => res.render("addType", { types: types }));
 
   app.use("/", function (req, res, next) {

@@ -41,6 +41,8 @@ class ES6 {
     return { amiibo: amiiboArray.amiibo.filter(amiibo => amiibo[fieldToTest] === filterValue) }
   }
 
+  addAmiibo
+
   addType(type) {
     typeSet.add(type);
   }

@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Amiibo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
-      const serverPort = "<%= port %>";
-      const redirectAddType = () => location.replace("/addType")
+        
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
+    <form id="add-amiibo-form" onsubmit="addAmiiboSubmit()">
+      <h3>Add new Amiibo</h3>
 
+      <label for="select-type">Type</label>
 
-    <%- include ('nav') %>
-    <%- include ('content') %>
+      <select id="select-type">
 
+      </select>
+    </form>
   </body>
 </html>
