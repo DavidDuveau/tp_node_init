@@ -7,12 +7,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
       const serverPort = "<%= port %>";
+      const redirectAddType = () => location.replace("/addType")
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
-    <%- include ('nav') %> <%- include ('content') %>
+
+
+    <%- include ('nav') %>
+    <%- include ('content') %>
 
     <script src="main.js"></script>
   </body>

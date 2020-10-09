@@ -17,6 +17,8 @@ const dataLoadedSuccess = () => {
   app.set("views", path.join(__dirname, "resources/ejsViews/"));
 
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }))
+
 
   app.use("/", express.static("src/resources/static/jquery-amiibo"));
   app.use("/", createRoutes());

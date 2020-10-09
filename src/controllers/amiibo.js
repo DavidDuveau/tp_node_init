@@ -1,7 +1,6 @@
 import dataImportES6 from "../import/ES6";
 
 const amiiboController = (req, res) => {
-  console.log(req.query);
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

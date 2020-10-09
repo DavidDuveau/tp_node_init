@@ -41,6 +41,10 @@ class ES6 {
     return { amiibo: amiiboArray.amiibo.filter(amiibo => amiibo[fieldToTest] === filterValue) }
   }
 
+  addType(type) {
+    typeSet.add(type);
+  }
+
   request(url, successCallback, errorCallback) {
     https.get(url, (res) => {
       console.log(res.statusCode);

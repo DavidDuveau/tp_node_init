@@ -7,13 +7,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
-      const types = "<%=types%>";
-      console.log(types);
+      const typeArray = [];
+
+      <% types.forEach(type => {%>
+        typeArray.push("<%=type.name%>")
+      <%});%>
 
       const checkTextPattern = () => {
         const form = document.getElementById("add-type-form");
+        const input = document.getElementById("add-type-text")
+
+        if (typeArray.includes(input.value)) {
+          input.setCustomValidity("Type déjà présent !!");
+        } else {
+          input.setCustomValidity("")
+        }
+        console.log(input.value);
+
         form.reportValidity();
       };
+
+      console.log(typeArray);
 
       const addTypeSubmit = () => {
         const value = document.getElementById("add-type-text").value;
@@ -23,16 +37,20 @@
           url: "/api/type",
           data: { value: value },
           dataType: "json",
+          success: () => location.replace("/")
         });
       };
+
+      const redirectHomepage = () => location.replace("/")
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
+
   <body>
     <div>
       <form action="" id="add-type-form" onsubmit="addTypeSubmit()">
-        <label for="">Add new type !!</label>
+        <h3 for="">Add new type</h3>
         <input
           autofocus
           type="text"
@@ -41,10 +59,10 @@
           minlength="4"
           required
           id="add-type-text"
-          oninput="checkTextPattern()"
-        />
+          oninput="checkTextPattern()" />
         <input type="submit" value="Ajouter" />
       </form>
+      <button type="button" onclick="redirectHomepage()">Retour</button>
     </div>
   </body>
 </html>
