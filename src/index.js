@@ -10,19 +10,13 @@ const dataLoadedSuccess = () => {
   // Lors du lancement du serveur avec npm run local, le port doit être préciser en troisième arguement, ex: npm run local 8853;
   // Si le port n'est pas spécifié, alors le port par defaut sera 8888.
   const port = process.argv[2] || 8888;
-  const amiibos = dataImportES6.getDataAmiibo;
-  const types = dataImportES6.getTypes.amiibo;
-  const characters = dataImportES6.getCharacters.amiibo;
-  const gameSeries = dataImportES6.getGameSeries.amiibo;
-  const amiiboSeries = dataImportES6.getAmiiboSeries.amiibo;
 
   app.set("view engine", "ejs");
 
   app.set("views", path.join(__dirname, "resources/ejsViews/"));
 
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }))
-
+  app.use(bodyParser.urlencoded({ extended: false }));
 
   app.use("/", express.static("src/resources/static/jquery-amiibo"));
   app.use("/", createRoutes());
@@ -31,8 +25,17 @@ const dataLoadedSuccess = () => {
     res.render("index", { port: port });
   });
 
-  app.get("/addAmiibo", (req, res) => res.render("addAmiibo", { amiibos: amiibos , types: types, characters: characters, gameSeries: gameSeries, amiiboSeries: amiiboSeries}));
-  app.get("/addType", (req, res) => res.render("addType", { types: types }));
+  app.get("/addAmiibo", (req, res) =>
+    res.render("addAmiibo", {
+      types: dataImportES6.getTypes.amiibo,
+      characters: dataImportES6.getCharacters.amiibo,
+      gameSeries: dataImportES6.getGameSeries.amiibo,
+      amiiboSeries: dataImportES6.getAmiiboSeries.amiibo,
+    })
+  );
+  app.get("/addType", (req, res) =>
+    res.render("addType", { types: dataImportES6.getTypes.amiibo })
+  );
 
   app.use("/", function (req, res, next) {
     res.status(404).sendFile(__dirname + "/404.png");

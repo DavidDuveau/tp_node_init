@@ -9,42 +9,41 @@
     <link rel="stylesheet" href="assets/css/addAmiibo.css" />
 
     <script type="text/javascript">
-
       const addAmiiboSubmit = () => {
-
         const type = document.getElementById("select-type").value;
         const character = document.getElementById("select-character").value;
-        const game = document.getElementById("select-game").value;
-        const amiiboSerie = document.getElementById("select-amiibo").value;
-        const amiiboName = document.getElementById("amiibo-name").value;
-        const img = document.getElementById("image").src;
+        const gameSeries = document.getElementById("select-game").value;
+        const amiiboSeries = document.getElementById("select-amiibo").value;
+        const name = document.getElementById("amiibo-name").value;
+        const image = document.getElementById("image").src;
         //debugger
 
         $.ajax({
-             type: "POST",
-             url: "/api/amiibo",
-             data: {
-               "name": amiiboName,
-               "gameSeries": game,
-               "amiiboSeries": amiiboSerie,
-               "character": character,
-               "type": type,
-               "imgAmiibo": img
-             },
-             dataType: "json",
-             success: () => location.replace("/")
-         });
+          type: "POST",
+          url: "/api/amiibo",
+          data: {
+            name: name,
+            gameSeries: gameSeries,
+            amiiboSeries: amiiboSeries,
+            character: character,
+            type: type,
+            image: image,
+          },
+          dataType: "json",
+          success: (res) => location.replace("/"),
+        });
       };
 
       const previewImage = (event) => {
         const reader = new FileReader();
         reader.onload = () => {
-          const output = document.getElementById('image');
+          const output = document.getElementById("image");
           output.src = reader.result;
-        }
+        };
         reader.readAsDataURL(event.target.files[0]);
-      }
+      };
 
+      const redirectHomepage = () => location.replace("/");
     </script>
   </head>
   <body>
@@ -55,7 +54,7 @@
 
       <select id="select-type" name="">
         <% types.forEach( type =>{%>
-          <option value="<%= type.name %>"><%= type.name %></option>
+        <option value="<%= type.name %>"><%= type.name %></option>
         <%});%>
       </select>
 
@@ -63,7 +62,7 @@
 
       <select id="select-character" name="">
         <% characters.forEach( character =>{%>
-          <option value="<%= character.name %>"><%= character.name %></option>
+        <option value="<%= character.name %>"><%= character.name %></option>
         <%});%>
       </select>
 
@@ -71,7 +70,7 @@
 
       <select id="select-game" name="">
         <% gameSeries.forEach( serie =>{%>
-          <option value="<%= serie.name %>"><%= serie.name %></option>
+        <option value="<%= serie.name %>"><%= serie.name %></option>
         <%});%>
       </select>
 
@@ -79,20 +78,33 @@
 
       <select id="select-amiibo" name="">
         <% amiiboSeries.forEach( serie =>{%>
-          <option value="<%= serie.name %>"><%= serie.name %></option>
+        <option value="<%= serie.name %>"><%= serie.name %></option>
         <%});%>
       </select>
 
       <label for="amiibo-name">Nom</label>
 
-      <input id="amiibo-name" type="text" name="amiibo-name" value="" required>
+      <input
+        id="amiibo-name"
+        type="text"
+        name="amiibo-name"
+        value=""
+        required
+      />
 
-      <input type="file" name="amiibo-image" accept="image/*" required onchange="previewImage(event)">
+      <input
+        type="file"
+        name="amiibo-image"
+        accept="image/*"
+        required
+        onchange="previewImage(event)"
+      />
 
-      <img id="image">
+      <img id="image" />
 
-    <input type="submit" value="Ajouter" />
+      <input type="submit" value="Ajouter" />
 
+      <button type="button" onclick="redirectHomepage()">Retour</button>
     </form>
   </body>
 </html>

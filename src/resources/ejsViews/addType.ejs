@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Amiibo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/addType.css" />
 
     <script>
       const typeArray = [];
 
-      <% types.forEach(type => {%>
+      <% types.forEach(type => { %>
         typeArray.push("<%=type.name%>")
-      <%});%>
+      <% }); %>
 
       const checkTextPattern = () => {
         const form = document.getElementById("add-type-form");
@@ -35,7 +36,8 @@
           url: "/api/type",
           data: { value: value },
           dataType: "json",
-          success: () => location.replace("/")
+          success: (res) => location.replace("/"),
+
         });
       };
 
@@ -46,22 +48,22 @@
   </head>
 
   <body>
-    <div>
-      <form id="add-type-form" onsubmit="addTypeSubmit()">
-        <h3>Add new type</h3>
+    <form id="add-type-form" onsubmit="addTypeSubmit()">
+      <h3>Add new type</h3>
 
-        <input
-          autofocus
-          type="text"
-          pattern="[A-Z][a-z-]+"
-          title="Une majuscule au début suivit de minuscule seulement"
-          minlength="4"
-          required
-          id="add-type-text"
-          oninput="checkTextPattern()" />
-        <input type="submit" value="Ajouter" />
-      </form>
+      <input
+        autofocus
+        type="text"
+        pattern="[A-Z][a-z-]+"
+        title="Une majuscule au début suivit de minuscule seulement"
+        minlength="4"
+        required
+        id="add-type-text"
+        oninput="checkTextPattern()"
+      />
+      <input type="submit" value="Ajouter" />
+
       <button type="button" onclick="redirectHomepage()">Retour</button>
-    </div>
+    </form>
   </body>
 </html>
