@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Amiibo</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
       const serverPort = "<%= port %>";
       const redirectAddType = () => location.replace("/addType")
+      const redirectAddAmiibo = () => location.replace("/addAmiibo")
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -18,5 +22,6 @@
     <%- include ('nav') %>
     <%- include ('content') %>
 
+    <script src="./main.js"></script>
   </body>
 </html>

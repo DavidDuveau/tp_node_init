@@ -1,0 +1,23 @@
+form{
+  width: 30%;
+  margin: auto;
+  border: 2px solid green;
+  border-radius: 10px;
+  padding: 1em;
+  background-color: lightgreen;
+  
+}
+
+label, input, button, select{
+  display: block;
+  width: 100%;
+}
+
+input, button, select{
+  margin-bottom: 1em
+}
+
+#image{
+  width: 300px;
+  border-radius: 10px;
+}

@@ -6,11 +6,46 @@
     <title>Amiibo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        
-    </script>
+    <link rel="stylesheet" href="assets/css/addAmiibo.css" />
 
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <script type="text/javascript">
+
+      const addAmiiboSubmit = () => {
+
+        const type = document.getElementById("select-type").value;
+        const character = document.getElementById("select-character").value;
+        const game = document.getElementById("select-game").value;
+        const amiiboSerie = document.getElementById("select-amiibo").value;
+        const amiiboName = document.getElementById("amiibo-name").value;
+        const img = document.getElementById("image").src;
+        //debugger
+
+        $.ajax({
+             type: "POST",
+             url: "/api/amiibo",
+             data: {
+               "name": amiiboName,
+               "gameSeries": game,
+               "amiiboSeries": amiiboSerie,
+               "character": character,
+               "type": type,
+               "imgAmiibo": img
+             },
+             dataType: "json",
+             success: () => location.replace("/")
+         });
+      };
+
+      const previewImage = (event) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const output = document.getElementById('image');
+          output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+      }
+
+    </script>
   </head>
   <body>
     <form id="add-amiibo-form" onsubmit="addAmiiboSubmit()">
@@ -18,9 +53,46 @@
 
       <label for="select-type">Type</label>
 
-      <select id="select-type">
-
+      <select id="select-type" name="">
+        <% types.forEach( type =>{%>
+          <option value="<%= type.name %>"><%= type.name %></option>
+        <%});%>
       </select>
+
+      <label for="select-character">Character</label>
+
+      <select id="select-character" name="">
+        <% characters.forEach( character =>{%>
+          <option value="<%= character.name %>"><%= character.name %></option>
+        <%});%>
+      </select>
+
+      <label for="select-game">Game Series</label>
+
+      <select id="select-game" name="">
+        <% gameSeries.forEach( serie =>{%>
+          <option value="<%= serie.name %>"><%= serie.name %></option>
+        <%});%>
+      </select>
+
+      <label for="select-amiibo">Amiibo Series</label>
+
+      <select id="select-amiibo" name="">
+        <% amiiboSeries.forEach( serie =>{%>
+          <option value="<%= serie.name %>"><%= serie.name %></option>
+        <%});%>
+      </select>
+
+      <label for="amiibo-name">Nom</label>
+
+      <input id="amiibo-name" type="text" name="amiibo-name" value="" required>
+
+      <input type="file" name="amiibo-image" accept="image/*" required onchange="previewImage(event)">
+
+      <img id="image">
+
+    <input type="submit" value="Ajouter" />
+
     </form>
   </body>
 </html>

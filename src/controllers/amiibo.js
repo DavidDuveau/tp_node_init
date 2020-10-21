@@ -15,8 +15,8 @@ const amiiboController = (req, res) => {
   res.status(200).json(amiiboFilteredArray);
 };
 
-export const addAmiiboController = () => {
-  dataImportES6.addAmiibo(req.body.value)
+export const addAmiiboController = (req,res) => {
+  //dataImportES6.addAmiibo(req.body.value)
   res.status(200).json({ result: true });
 }
 

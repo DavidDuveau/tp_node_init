@@ -8,8 +8,9 @@ import typeController, {addTypeController} from "./controllers/type";
 const createRoutes = () => {
   const routes = Router();
 
-  routes.post("api/amiibo", addAmiiboController)
-  routes.post("/api/type", addTypeController)
+
+  routes.post("/api/type", addTypeController);
+  routes.post("/api/amiibo", addAmiiboController);
 
   routes.get("/api/amiibo", amiiboController);
   routes.get("/api/type", typeController);
