@@ -51,8 +51,6 @@ class ES6 {
 
   request(url, successCallback, errorCallback) {
     https.get(url, (res) => {
-      console.log(res.statusCode);
-
       if (res.statusCode > 399) {
         errorCallback();
         return;

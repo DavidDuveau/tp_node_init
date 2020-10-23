@@ -3,6 +3,7 @@ import express from "express";
 import createRoutes from "./routes";
 import dataImportES6 from "./import/ES6";
 import bodyParser from "body-parser";
+import loadDatabase from "./import/connector";
 
 const dataLoadedSuccess = () => {
   const app = express();
@@ -50,7 +51,8 @@ const dataLoadedSuccess = () => {
 };
 
 const dataLoadedError = () => {
-  console.log("An error occured loading datas");
+  console.log("An error occured while loading datas");
 };
 
-dataImportES6.load(dataLoadedSuccess, dataLoadedError);
+// dataImportES6.load(dataLoadedSuccess, dataLoadedError);
+loadDatabase().then(dataLoadedSuccess).catch(dataLoadedError);
