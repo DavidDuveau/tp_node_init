@@ -12,14 +12,14 @@ const db = mysql.createConnection({
 
 const loadDatabase = () => {
     return new Promise((resolve, reject) => {
-        db.connect((err) => {
-            if (err) throw err;
+        db.connect(err => {
+            if (err) reject(err);
             console.log(`Connected to ${databaseName} database.`);
 
             db.query(`SHOW DATABASES LIKE "${databaseName}"`,
                 (err, result) => {
                     if (result.length) {
-                        if (err) throw err;
+                        if (err) reject(err);
                         resolve();
                     } else {
                         db.query(
@@ -43,7 +43,7 @@ const loadDatabase = () => {
                                 'FOREIGN KEY (fk_types) REFERENCES types(name)' +
                             ') ENGINE = InnoDB;'
                             , async (err) => {
-                                if (err) throw err;
+                                if (err) reject(err);
                                 console.log('Database and tables created.');
 
                                 dataImportES6.load(async () => {
@@ -61,7 +61,7 @@ const loadDatabase = () => {
                                     });
 
                                     db.query(sql, (err) => {
-                                        if (err) throw err;
+                                        if (err) reject(err);
                                         console.log(`Table ${databaseName} populated with ${dataImportES6.getDataAmiibo.amiibo.length} elements.`);
                                         setTimeout(() => {
                                             console.log('All done !');
