@@ -1,13 +1,13 @@
 import mysql from "mysql";
 import dataImportES6 from "./ES6";
 
-const databaseName = "amiibo";
+const databaseName = "amiibos";
 
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    multipleStatements: true
+  host: "localhost",
+  user: "root",
+  password: "",
+  multipleStatements: true
 });
 
 const loadDatabase = () => {
@@ -20,7 +20,6 @@ const loadDatabase = () => {
                 (err, result) => {
                     if (result.length) {
                         if (err) throw err;
-                        console.log(`Database ${databaseName} already created.`);
                         resolve();
                     } else {
                         db.query(
@@ -31,17 +30,17 @@ const loadDatabase = () => {
                             'CREATE TABLE gameseries (name VARCHAR(255) PRIMARY KEY) ENGINE = InnoDB;' +
                             'CREATE TABLE types (name VARCHAR(255) PRIMARY KEY) ENGINE = InnoDB;' +
                             'CREATE TABLE amiibos (' +
-                            'id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,' +
-                            'name VARCHAR(255),' +
-                            'image VARCHAR(255),' +
-                            'fk_amiiboSeries VARCHAR(255),' +
-                            'fk_characters VARCHAR(255),' +
-                            'fk_gameSeries VARCHAR(255),' +
-                            'fk_types VARCHAR(255),' +
-                            'FOREIGN KEY (fk_amiiboSeries) REFERENCES amiiboSeries(name),' +
-                            'FOREIGN KEY (fk_characters) REFERENCES characters(name),' +
-                            'FOREIGN KEY (fk_gameSeries) REFERENCES gameSeries(name),' +
-                            'FOREIGN KEY (fk_types) REFERENCES types(name)' +
+                                'id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,' +
+                                'name VARCHAR(255),' +
+                                'image VARCHAR(255),' +
+                                'fk_amiiboseries VARCHAR(255),' +
+                                'fk_characters VARCHAR(255),' +
+                                'fk_gameseries VARCHAR(255),' +
+                                'fk_types VARCHAR(255),' +
+                                'FOREIGN KEY (fk_amiiboseries) REFERENCES amiiboseries(name),' +
+                                'FOREIGN KEY (fk_characters) REFERENCES characters(name),' +
+                                'FOREIGN KEY (fk_gameseries) REFERENCES gameseries(name),' +
+                                'FOREIGN KEY (fk_types) REFERENCES types(name)' +
                             ') ENGINE = InnoDB;'
                             , async (err) => {
                                 if (err) throw err;
@@ -53,17 +52,17 @@ const loadDatabase = () => {
                                     await populateDatabase('gameseries', dataImportES6.getGameSeries);
                                     await populateDatabase('types', dataImportES6.getTypes);
 
-                                    console.log('Populating amiibos table...');
+                                    console.log(`Populating ${databaseName} table...`);
 
                                     let sql = `USE ${databaseName}; `;
 
                                     dataImportES6.getDataAmiibo.amiibo.forEach(element => {
-                                        sql += `INSERT INTO amiibos(name, image, fk_amiiboSeries, fk_characters, fk_gameSeries, fk_types) VALUES("${element.name}", "${element.image}", "${element.amiiboSeries}", "${element.character}", "${element.gameSeries}", "${element.type}"); `;
+                                        sql += `INSERT INTO ${databaseName}(name, image, fk_amiiboSeries, fk_characters, fk_gameSeries, fk_types) VALUES("${element.name}", "${element.image}", "${element.amiiboSeries}", "${element.character}", "${element.gameSeries}", "${element.type}"); `;
                                     });
 
                                     db.query(sql, (err) => {
                                         if (err) throw err;
-                                        console.log(`Table amiibos populated with ${dataImportES6.getDataAmiibo.amiibo.length} elements.`);
+                                        console.log(`Table ${databaseName} populated with ${dataImportES6.getDataAmiibo.amiibo.length} elements.`);
                                         setTimeout(() => {
                                             console.log('All done !');
                                             resolve();

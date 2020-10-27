@@ -50,8 +50,8 @@ const dataLoadedSuccess = () => {
   app.listen(port);
 };
 
-const dataLoadedError = () => {
-  console.log("An error occured while loading datas");
+const dataLoadedError = (err) => {
+  console.log("An error occured while loading datas : " + err);
 };
 
 // dataImportES6.load(dataLoadedSuccess, dataLoadedError);
