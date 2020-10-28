@@ -33,15 +33,13 @@ const loadDatabase = (successCallback, errorCallback) => {
           if(err) errorCallback(err);
           if (result.length) {
             console.log(`Database : ${databaseName} already created`);
-            // connector.query(
-            //   `DROP DATABASE IF EXISTS ${databaseName}`, createDatabase(err)
-            // )
+            connector.query(
+              `DROP DATABASE IF EXISTS ${databaseName}`, createDatabase(err)
+            )
             console.log("Connected!");
             successCallback();
         } else {
-          connector.query(
-            `DROP DATABASE IF EXISTS ${databaseName}`, createDatabase(err)
-          )
+          createDatabase(err);
           console.log("Connected!");
           successCallback();
         }
