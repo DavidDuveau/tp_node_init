@@ -18,7 +18,7 @@ class ES6 {
   };
 
   get getDataAmiibo() {
-    return { amiibo: dataAmiibo } ;
+    return { amiibo: dataAmiibo };
   }
 
   get getTypes() {
