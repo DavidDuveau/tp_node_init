@@ -22,25 +22,28 @@ const populateMinorTable = (tableName, data) => {
 
     tableMap.set(item.name, i + 1);
 
-    console.log(sql);
     connector.query(sql);
   });
   console.table(tableMap);
   return tableMap;
 };
 
+//data for amiibo with foreign key
 const populateAmiiboTable = (typeMap, charactersMap, amiiboSeriesMap, gameSeriesMap) => {
   dataImportES6.getDataAmiibo.amiibo.forEach((item, i) => {
-    let sql = `INSERT INTO amiibo (id, name, image, type_id, amiiboseries_id, gameseries_id, characters_id) VALUES (NULL,"${item.name}", "${item.image}", '${typeMap.get(item.type)}', '${amiiboSeriesMap.get(item.amiiboSeries)}', '${gameSeriesMap.get(item.gameSeries)}', '${charactersMap.get(item.character)}');`;
-    console.log(sql);
+
+    let sql = `INSERT INTO amiibo (id, name, image, type_id, amiiboseries_id, gameseries_id, characters_id)
+    VALUES (NULL,"${item.name}", "${item.image}", '${typeMap.get(item.type)}',
+      '${amiiboSeriesMap.get(item.amiiboSeries)}', '${gameSeriesMap.get(item.gameSeries)}',
+      '${charactersMap.get(item.character)}');`;
+
     connector.query(sql)
   });
-
 }
 
 //import of data from API
 const importES6Data = (successCallback, errorCallback) => {
-  console.log('ready to import data');
+  console.log('-----> READY TO IMPORT DATA <-----');
   dataImportES6.load(
     () => {
       console.log('data ES6 imported');
@@ -59,15 +62,15 @@ const createDatabase = (successCallback, errorCallback) => {
   importer.import('./src/db/test.sql')
     .then(() => {
       const files_imported = importer.getImported();
-      console.log(`${files_imported.length} SQL file(s) imported.`);
-      console.log(`DB created`);
+      console.log(`-----> SQL SUCCESSFULLY IMPORTED <-----`);
+      console.log(`-----> DB CREATED <-----`);
       connector.query(
         `USE ${databaseName}`, (err, result) => {
           if(err) {
             errorCallback();
             return;
           }
-          console.log("Connected!");
+          console.log("-----> CONNECTED ! <-----");
           importES6Data(successCallback, errorCallback);
         });
     })
@@ -94,7 +97,7 @@ const loadDatabase = (successCallback, errorCallback) => {
             return;
           }
           if (result.length) {
-            console.log(`Database : ${databaseName} already created`);
+            console.log(`-----> DATABASE : ${databaseName} ALREADY CREATED <-----`);
             connector.query(
               `DROP DATABASE IF EXISTS ${databaseName};`, (err, result) => {
                 if (err) {
