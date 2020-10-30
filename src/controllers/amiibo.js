@@ -1,4 +1,7 @@
 import dataImportES6 from "../import/ES6";
+import {
+  createJSONAmiibo
+} from "../db/connector.js"
 
 const amiiboController = (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -11,18 +14,20 @@ const amiiboController = (req, res) => {
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
 
-  let amiiboFilteredArray = dataImportES6.getDataAmiibo;
+  createJSONAmiibo().then(amiiboFilteredArray => {
+    for (const property in req.query) {
+      amiiboFilteredArray = dataImportES6.getAmiiboByFilter(
+        amiiboFilteredArray,
+        property,
+        req.query[property]
+      );
+    }
 
-  for (const property in req.query) {
-    amiiboFilteredArray = dataImportES6.getAmiiboByFilter(
-      amiiboFilteredArray,
-      property,
-      req.query[property]
-    );
-  }
-
-  res.status(200).json(amiiboFilteredArray);
+    res.status(200).json(amiiboFilteredArray);
+  })
 };
+export default amiiboController;
+
 
 export const addAmiiboController = (req, res) => {
   const newAmiibo = {
@@ -34,7 +39,7 @@ export const addAmiiboController = (req, res) => {
     image: req.body.image,
   };
   dataImportES6.addAmiibo(newAmiibo);
-  res.status(200).json({ result: true });
+  res.status(200).json({
+    result: true
+  });
 };
-
-export default amiiboController;

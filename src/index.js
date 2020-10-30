@@ -3,7 +3,7 @@ import express from "express";
 import createRoutes from "./routes";
 import dataImportES6 from "./import/ES6";
 import bodyParser from "body-parser";
-import loadDatabase from "./db/connector.js"
+import loadDatabase, { createJSONData, createJSONAmiibo} from "./db/connector.js"
 
 const dataLoadedSuccess = () => {
   const app = express();
@@ -28,14 +28,14 @@ const dataLoadedSuccess = () => {
 
   app.get("/addAmiibo", (req, res) =>
     res.render("addAmiibo", {
-      types: dataImportES6.getTypes.amiibo,
-      characters: dataImportES6.getCharacters.amiibo,
-      gameSeries: dataImportES6.getGameSeries.amiibo,
-      amiiboSeries: dataImportES6.getAmiiboSeries.amiibo,
+      types: createJSONData('type').amiibo,
+      characters: createJSONData('characters').amiibo,
+      gameSeries:createJSONData('gameseries').amiibo,
+      amiiboSeries: createJSONData('amiiboseries').amiibo,
     })
   );
   app.get("/addType", (req, res) =>
-    res.render("addType", { types: dataImportES6.getTypes.amiibo })
+    res.render("addType", { types: createJSONData('type').amiibo })
   );
 
   app.use("/", function (req, res, next) {

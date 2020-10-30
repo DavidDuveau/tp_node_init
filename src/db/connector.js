@@ -11,7 +11,7 @@ const databaseName = 'amiibo';
 const importer = new Importer({ host, user, password, databaseName });
 
 //connection to db
-const connector = mysql.createConnection({ host, user, password });
+const connector = mysql.createConnection({ host, user, password, multipleStatements: true });
 
 //data for linked tables (type, characters ...)
 const populateMinorTable = (tableName, data) => {
@@ -24,11 +24,10 @@ const populateMinorTable = (tableName, data) => {
 
     connector.query(sql);
   });
-  console.table(tableMap);
   return tableMap;
 };
 
-//data for amiibo with foreign key
+//data for amiibo amiibo table
 const populateAmiiboTable = (typeMap, charactersMap, amiiboSeriesMap, gameSeriesMap) => {
   dataImportES6.getDataAmiibo.amiibo.forEach((item, i) => {
 
@@ -46,17 +45,18 @@ const importES6Data = (successCallback, errorCallback) => {
   console.log('-----> READY TO IMPORT DATA <-----');
   dataImportES6.load(
     () => {
-      console.log('data ES6 imported');
+      console.log('-----> DATA ES6 IMPORTED <-----');
       const typeMap = populateMinorTable('type', dataImportES6.getTypes.amiibo);
-      const charactersMap = populateMinorTable('characters', dataImportES6.getCharacters.amiibo);
       const amiiboSeriesMap = populateMinorTable('amiiboseries', dataImportES6.getAmiiboSeries.amiibo);
       const gameSeriesMap = populateMinorTable('gameseries', dataImportES6.getGameSeries.amiibo);
-      populateAmiiboTable(typeMap, charactersMap, amiiboSeriesMap, gameSeriesMap);
+      const charactersMap = populateMinorTable('characters', dataImportES6.getCharacters.amiibo)
+      populateAmiiboTable(typeMap, charactersMap, amiiboSeriesMap, gameSeriesMap)
       successCallback();
     },
     errorCallback
   )
 }
+
 //db creation with .sql import
 const createDatabase = (successCallback, errorCallback) => {
   importer.import('./src/db/test.sql')
@@ -80,20 +80,70 @@ const createDatabase = (successCallback, errorCallback) => {
     });
 }
 
+//construction of json for type characters etc
+export const createJSONData = (tableName) => {
+  return new Promise(
+    (resolve, reject) => {
+      let jsonData = { amiibo: [] };
+      connector.query(
+        "SELECT * FROM " + tableName, (err, result) => {
+          if(err) {
+            console.log("-----> ERROR MAKING JSON <-----");
+            reject(err);
+          }
+          result.forEach(item => {
+          jsonData.amiibo.push({ name: item.name });
+          });
+          resolve(jsonData);
+        });
+    })
+}
+
+
+export const createJSONAmiibo = () => {
+  return new Promise(
+    (resolve, reject) => {
+      let jsonAmiibo = { amiibo: [] };
+      connector.query(
+        `SELECT amiibo.name, amiibo.image, type.name AS typeName, gameseries.name AS gameName, amiiboseries.name AS serieName, characters.name AS characterName
+        FROM amiibo INNER JOIN type ON amiibo.type_id=type.id
+        INNER JOIN characters ON amiibo.characters_id=characters.id
+        INNER JOIN amiiboseries ON amiibo.amiiboseries_id=amiiboseries.id
+        INNER JOIN gameseries ON amiibo.gameseries_id=gameseries.id;`,
+        (err, result) => {
+          if(err) {
+            console.log("-----> ERROR MAKING JSON AMIIBO <-----");
+            reject(err);
+          }
+          result.forEach(item => {
+            jsonAmiibo.amiibo.push({
+              "name": item.name,
+              "character": item.characterName,
+              "type": item.typeName,
+              "image": item.image,
+              "amiiboSeries":item.serieName,
+              "gameSeries": item.gameName,
+             });
+          });
+          resolve(jsonAmiibo);
+        });
+    })
+}
+
 //check if db exist, yes -> drop it and make it again, no -> make it
 //function called in index.js
 const loadDatabase = (successCallback, errorCallback) => {
   connector.connect(
     err => {
       if(err) {
-        errorCallback();
+        errorCallback;
         return;
       }
       connector.query(
         `SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '${databaseName}';`,
         (err, result) => {
           if(err){
-            errorCallback();
+            errorCallback;
             return;
           }
           if (result.length) {
@@ -101,7 +151,7 @@ const loadDatabase = (successCallback, errorCallback) => {
             connector.query(
               `DROP DATABASE IF EXISTS ${databaseName};`, (err, result) => {
                 if (err) {
-                  errorCallback();
+                  errorCallback;
                   return;
                 }
                 createDatabase(successCallback, errorCallback);
