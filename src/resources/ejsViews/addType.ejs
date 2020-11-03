@@ -18,7 +18,7 @@
         const form = document.getElementById("add-type-form");
         const input = document.getElementById("add-type-text")
 
-        if (typeArray.includes(input.value))
+        if (typeArray.includes(input.value)){
           input.setCustomValidity("Type déjà présent !!");
         } else {
           input.setCustomValidity("")
@@ -41,7 +41,7 @@
         });
       };
 
-      const redirectHomepage = () => location.replace("/")
+      const redirectHomepage = () => location.href = "/";
     </script>
 
     <link rel="stylesheet" href="assets/css/style.css" />

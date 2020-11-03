@@ -26,17 +26,25 @@ const dataLoadedSuccess = () => {
     res.render("index", { port: port });
   });
 
-  app.get("/addAmiibo", (req, res) =>
+  app.get("/addType", async (req, res) =>{
+  const data = await createJSONData('type');
+  console.log(data);
+  res.render("addType", { types:  data.amiibo })
+  });
+
+  app.get("/addAmiibo", async (req, res) =>{
+    const typeData = await createJSONData('type');
+    const characterData = await createJSONData('characters');
+    const gameSerieData = await createJSONData('gameseries');
+    const amiiboSerieData = await createJSONData('amiiboseries');
+
     res.render("addAmiibo", {
-      types: createJSONData('type').amiibo,
-      characters: createJSONData('characters').amiibo,
-      gameSeries:createJSONData('gameseries').amiibo,
-      amiiboSeries: createJSONData('amiiboseries').amiibo,
+      types: typeData.amiibo,
+      characters: characterData.amiibo,
+      gameSeries:gameSerieData.amiibo,
+      amiiboSeries: amiiboSerieData.amiibo,
     })
-  );
-  app.get("/addType", (req, res) =>
-    res.render("addType", { types: createJSONData('type').amiibo })
-  );
+  });
 
   app.use("/", function (req, res, next) {
     res.status(404).sendFile(__dirname + "/404.png");
