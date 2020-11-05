@@ -30,14 +30,17 @@
 
       const addTypeSubmit = () => {
         const value = document.getElementById("add-type-text").value;
-
+        //debugger
         $.ajax({
-          type: "POST",
+          type: "post",
           url: "/api/type",
           data: { value: value },
           dataType: "json",
-          success: (res) => location.replace("/"),
-
+          success: (res) => {location.replace("/")},
+          error: (e,f,g) => {
+            console.log("toto", g);
+            debugger
+          }
         });
       };
 

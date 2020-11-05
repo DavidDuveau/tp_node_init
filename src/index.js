@@ -3,7 +3,7 @@ import express from "express";
 import createRoutes from "./routes";
 import dataImportES6 from "./import/ES6";
 import bodyParser from "body-parser";
-import loadDatabase, { createJSONData, createJSONAmiibo} from "./db/connector.js"
+import loadDatabase, { createJSONData } from "./db/connector.js"
 
 const dataLoadedSuccess = () => {
   const app = express();
@@ -28,7 +28,6 @@ const dataLoadedSuccess = () => {
 
   app.get("/addType", async (req, res) =>{
   const data = await createJSONData('type');
-  console.log(data);
   res.render("addType", { types:  data.amiibo })
   });
 
@@ -53,13 +52,13 @@ const dataLoadedSuccess = () => {
   app.use("/", function (err, req, res, next) {
     res.status(500).send("Une erreur 500 est survenue!");
   });
-  console.log(`Server started on port : ${port}`);
+  console.log(`-----> SERVER STATRTED ON PORT : ${port} <-----`);
 
   app.listen(port);
 };
 
 const dataLoadedError = () => {
-  console.log("An error occured loading datas");
+  console.log("-----> AN ERROR OCCURED LOADING DATAS <-----");
 };
 
 // dataImportES6.load(dataLoadedSuccess, dataLoadedError);

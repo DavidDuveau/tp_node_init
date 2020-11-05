@@ -98,7 +98,7 @@ export const createJSONData = (tableName) => {
         amiibo: []
       };
       connector.query(
-        "SELECT * FROM " + tableName, (err, result) => {
+        `SELECT * FROM ${tableName};`, (err, result) => {
           if (err) {
             console.log("-----> ERROR MAKING JSON <-----");
             reject(err);
@@ -108,6 +108,7 @@ export const createJSONData = (tableName) => {
               name: item.name
             });
           });
+          console.log("A1");
           resolve(jsonData);
         });
     })
@@ -140,18 +141,28 @@ export const createJSONAmiibo = () => {
             console.log("-----> ERROR MAKING JSON AMIIBO <-----");
             reject(err);
           }
+          console.log("B1");
           resolve({ amiibo: result});
         });
     })
 }
 
-// const addTypeDatabase = () => {
-//   return new Promise((resolve, reject) => {
-//     connector.query(
-//       `INSERT INTO type (type.name) VALUES ()`
-//     )
-//   })
-// }
+//add type to db
+export const addTypeDatabase = (type) => {
+  console.log("dans addTypeDatabase");
+  return new Promise((resolve, reject) => {
+    connector.query(
+      `INSERT INTO type (id, name) VALUES (NULL, "${type}");`,
+      (err,result) => {
+        if(err){
+          console.log("-----> ERROR ADDING TYPE <-----");
+          reject(err);
+        }
+        console.log(result);
+        resolve();
+      });
+  })
+}
 
 //check if db exist, yes -> drop it and make it again, no -> make it
 //function called in index.js
