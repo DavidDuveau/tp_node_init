@@ -23,6 +23,7 @@ const dataLoadedSuccess = () => {
         extended: false
     }));
 
+    app.use('/img', express.static('src/img'));
     app.use("/", express.static("src/resources/static/jquery-amiibo"));
     app.use("/", createRoutes());
 

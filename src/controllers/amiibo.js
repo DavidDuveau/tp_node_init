@@ -1,6 +1,7 @@
 import dataImportES6 from "../import/ES6";
 import { db } from '../import/connector';
 import fs from 'fs';
+import path from 'path';
 
 const amiiboController = (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -32,12 +33,12 @@ const amiiboController = (req, res) => {
 };
 
 export const addAmiiboController = (req, res) => {
-    const imgName = `src/img/${req.body.name}_${req.body.amiiboSeries}_${req.body.character}_${req.body.type}`
+    // TODO : Prendre en compte tous les types d'images
+    // TODO : URLizer les noms de fichiers
+    const imgName = `${req.body.name}_${req.body.amiiboSeries}_${req.body.character}_${req.body.type}.png`
     const imgData = req.body.image.replace(/^data:image\/\w+;base64,/, '');
 
-    // TODO : Stocker l'image totale dans le champ image
-
-    fs.writeFile(imgName, imgData, 'base64', (err) => {
+    fs.writeFile('src/img/' + imgName, imgData, 'base64', (err) => {
         if (err) throw err;
         console.log('File created!');
         db.query(
@@ -45,7 +46,7 @@ export const addAmiiboController = (req, res) => {
             'INSERT INTO amiibos(name, image, fk_amiiboseries, fk_characters, fk_gameseries, fk_types) ' +
             'VALUES(' +
                 db.escape(req.body.name) + ',' +
-                db.escape('http://localhost:8888/' + imgName) + ',' +
+                db.escape('img/' + imgName) + ',' +
                 db.escape(req.body.amiiboSeries) + ',' +
                 db.escape(req.body.character) + ',' +
                 db.escape(req.body.gameSeries) + ',' +

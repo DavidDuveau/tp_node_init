@@ -20,7 +20,7 @@ const typeController = (req, res) => {
 };
 
 export const addTypeController = (req, res) => {
-    db.query('USE amiibos; INSERT INTO types VALUES("' + db.escape(req.body.value) + '");', (err) => {
+    db.query('USE amiibos; INSERT INTO types VALUES(' + db.escape(req.body.value) + ');', (err) => {
         if (err) throw err;
         res.status(200).json({ result: true });
     });
